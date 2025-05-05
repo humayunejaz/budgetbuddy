@@ -1,3 +1,4 @@
+// src/components/ExpenseChart.js
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -8,11 +9,7 @@ function ExpenseChart({ expenses }) {
   const categoryTotals = {};
 
   expenses.forEach(({ category, amount }) => {
-    if (category in categoryTotals) {
-      categoryTotals[category] += amount;
-    } else {
-      categoryTotals[category] = amount;
-    }
+    categoryTotals[category] = (categoryTotals[category] || 0) + amount;
   });
 
   const data = {
@@ -22,16 +19,8 @@ function ExpenseChart({ expenses }) {
         label: "Spending by Category",
         data: Object.values(categoryTotals),
         backgroundColor: [
-          "#6366F1", // Indigo
-          "#F59E0B", // Amber
-          "#EF4444", // Red
-          "#10B981", // Green
-          "#3B82F6", // Blue
-          "#8B5CF6", // Violet
-          "#EC4899", // Pink
-          "#F97316", // Orange
-          "#14B8A6", // Teal
-          "#A855F7"  // Purple
+          "#6366F1", "#F59E0B", "#EF4444", "#10B981", "#3B82F6",
+          "#8B5CF6", "#EC4899", "#F97316", "#14B8A6", "#A855F7"
         ],
         borderWidth: 1,
       },
@@ -44,13 +33,19 @@ function ExpenseChart({ expenses }) {
     plugins: {
       legend: {
         position: "bottom",
+        labels: {
+          boxWidth: 20,
+          padding: 10,
+        },
       },
     },
   };
 
   return (
-    <div className="bg-white p-4 mt-6 rounded shadow-md max-w-md mx-auto">
-      <h2 className="text-lg font-semibold mb-4 text-center">Spending Breakdown</h2>
+    <div className="bg-white p-4 mt-6 rounded-xl shadow max-w-md mx-auto">
+      <h2 className="text-lg font-semibold mb-4 text-center text-gray-800">
+        Spending Breakdown
+      </h2>
       <div style={{ width: "360px", height: "360px", margin: "0 auto" }}>
         <Doughnut data={data} options={options} />
       </div>
